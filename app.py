@@ -182,27 +182,34 @@ button:focus-visible,input:focus-visible,textarea:focus-visible {{outline:4px so
 
 
 st.markdown("""<style>
-:root {color-scheme:dark;}
-.stApp {background:#0B0B0F;color:#FAF7F9;}
-[data-testid="stHeader"] {background:#0B0B0F;}
-[data-testid="stSidebar"] {background:#19191F;color:#FAF7F9;}
-h1,h2,h3,p,label,li,[data-testid="stMarkdownContainer"] {color:#FAF7F9;}
+:root {color-scheme:light;--ink:#172D41;--green:#006B68;--paper:#FFFFFF;--accent:#A84317;}
+.stApp {background:#FFFFFF;color:#172D41;}
+[data-testid="stHeader"] {background:#FFFFFF;}
+[data-testid="stSidebar"] {background:#F2F5F2;color:#172D41;border-right:2px solid #CCD5CE;}
+h1,h2,h3,p,label,li,[data-testid="stMarkdownContainer"] {color:#172D41;}
 .block-container {max-width:600px;padding-top:.7rem;}
-h1 {font-weight:850;letter-spacing:-.04em;}
-.brand,.note {color:#E6CBDC;}
-.mascot-hero {max-width:430px;margin:0 auto 4px;}
-.mascot-hero img {width:100%;max-height:255px;object-fit:contain;border-radius:28px;display:block;}
-.stButton>button,.stFormSubmitButton>button,.stDownloadButton>button {background:#BCE5FA!important;color:#17171E!important;border:3px solid #BCE5FA!important;border-radius:23px;box-shadow:0 4px 0 #55788B;font-weight:800;}
-.stButton>button p,.stFormSubmitButton>button p,.stDownloadButton>button p {color:#17171E!important;}
-button[kind="primary"],[data-testid="stBaseButton-primary"] {background:#FFC6E4!important;color:#17171E!important;border-color:#FFC6E4!important;box-shadow:0 4px 0 #976D87;}
-.stButton>button:hover {filter:brightness(1.08);transform:translateY(-1px);}
-.stButton>button:disabled {opacity:.42;}
-.explain {background:#25232C;color:#FAF7F9;border-left:5px solid #FFC6E4;border-radius:16px;}
-input,textarea,[data-baseweb="select"]>div {background:#25252D!important;color:#FFFFFF!important;}
-[data-testid="stCaptionContainer"] p {color:#D6CED7!important;}
-[data-testid="stFileUploader"] {background:#202028;border-radius:16px;padding:8px;}
-button:focus-visible,input:focus-visible,textarea:focus-visible {outline:4px solid #FFE69A!important;outline-offset:4px;}
-@media(max-width:480px) {.mascot-hero img {max-height:205px;} .block-container {padding-top:.4rem;}}
+h1 {font-weight:850;letter-spacing:-.035em;}
+.brand {color:#31493F;letter-spacing:.06em;background:#E4EBD1;border:2px inset #A5B293;border-radius:7px;padding:8px 4px;font-weight:750;}
+.note {color:#405448;}
+.mascot-hero {max-width:390px;margin:8px auto 14px;padding:16px 16px 30px;background:#183F49;border:3px solid #102F38;border-radius:38px 38px 24px 24px;box-shadow:0 6px 0 #BAC8C6;position:relative;}
+.mascot-hero::before {content:"● ● ●";display:block;text-align:right;color:#F6B545;letter-spacing:7px;font-size:15px;margin-bottom:8px;}
+.mascot-hero::after {content:"♥  8282";position:absolute;bottom:5px;left:22px;right:22px;color:#ECF1D6;font:700 16px monospace;letter-spacing:5px;text-align:center;}
+.mascot-hero img {width:100%;max-height:230px;object-fit:contain;border:3px inset #6F8583;border-radius:17px;display:block;background:#0B0B0F;}
+.stButton>button,.stFormSubmitButton>button,.stDownloadButton>button {background:#FFFFFF!important;color:#173B45!important;border:2px solid #51767B!important;border-radius:18px;box-shadow:0 4px 0 #BCCBC9;font-weight:800;}
+.stButton>button p,.stFormSubmitButton>button p,.stDownloadButton>button p {color:#173B45!important;}
+button[kind="primary"],[data-testid="stBaseButton-primary"] {background:#006B68!important;color:#FFFFFF!important;border-color:#005653!important;box-shadow:0 4px 0 #003E3C;}
+button[kind="primary"] p,[data-testid="stBaseButton-primary"] p {color:#FFFFFF!important;}
+.stButton>button:hover {background:#E7F3F0!important;border-color:#006B68!important;}
+button[kind="primary"]:hover,[data-testid="stBaseButton-primary"]:hover {background:#005653!important;}
+.stButton>button:disabled {opacity:.5;box-shadow:none;}
+.explain {background:#FFF5DF;color:#172D41;border-left:6px solid #A84317;border-radius:14px;}
+input,textarea,[data-baseweb="select"]>div {background:#FFFFFF!important;color:#172D41!important;border-color:#748A8D!important;}
+[data-testid="stCaptionContainer"] p {color:#475C63!important;}
+[data-testid="stFileUploader"] {background:#F1F6F3;border:1px solid #9DB4AC;border-radius:16px;padding:8px;}
+[data-testid="stExpander"] {background:#FFFFFF;color:#172D41;}
+[data-testid="stAlert"] p {color:#172D41!important;}
+button:focus-visible,input:focus-visible,textarea:focus-visible {outline:4px solid #BA4C19!important;outline-offset:4px;}
+@media(max-width:480px) {.mascot-hero {max-width:330px;padding:11px 11px 28px;} .mascot-hero img {max-height:190px;} .block-container {padding-top:.4rem;}}
 </style>""", unsafe_allow_html=True)
 
 
@@ -216,7 +223,7 @@ HERO_IMAGE = "iVBORw0KGgoAAAANSUhEUgAABPAAAANQCAYAAACmeJFjAAEAAElEQVR4nNT97bL0OM
 def drawing(kind="logo", title="", step=0):
     """외부 이미지 없이 포함된 벡터 그림. 교육 화면은 실제 앱 캡처가 아닌 예시입니다."""
     if kind == "logo":
-        st.markdown('<div class="mascot-hero"><img alt="휴대폰으로 서로 돕는 말랑한 가족 캐릭터" src="data:image/jpeg;base64,' + HERO_IMAGE + '" /></div>', unsafe_allow_html=True)
+        st.markdown('<div class="mascot-hero"><img alt="휴대폰으로 서로 돕는 말랑한 가족 캐릭터" src="data:image/png;base64,' + HERO_IMAGE + '" /></div>', unsafe_allow_html=True)
         return
     title = html.escape(title)
     if kind == "logo":
