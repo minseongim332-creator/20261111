@@ -213,6 +213,33 @@ button:focus-visible,input:focus-visible,textarea:focus-visible {outline:4px sol
 </style>""", unsafe_allow_html=True)
 
 
+st.markdown("""<style>
+.stApp {background:#F6F8F5;color:#18372D;}
+[data-testid="stHeader"] {background:#F6F8F5;}
+.block-container {background:#FFFFFF;max-width:620px;padding:1rem 1.1rem 2rem;border-left:1px solid #E1E8E1;border-right:1px solid #E1E8E1;min-height:100vh;}
+.mascot-hero {background:#E8F3EA;border:2px solid #D1E6D5;border-radius:28px;box-shadow:none;max-width:350px;padding:10px;margin:12px auto;}
+.mascot-hero::before,.mascot-hero::after {display:none;}
+.mascot-hero img {border:0;border-radius:22px;max-height:180px;}
+.brand {background:#E8F4EA;border:none;border-radius:14px;letter-spacing:0;color:#185338;}
+.welcome-label {text-align:center;letter-spacing:.12em;font-size:13px;color:#346248;font-weight:800;padding-top:12px;}
+.intro-copy {text-align:center;line-height:1.6;color:#42594F;font-size:19px;margin:8px auto 16px;max-width:440px;}
+.preview-strip {background:#F1EDF9;border-radius:18px;padding:15px 8px;text-align:center;color:#513F73;margin-top:18px;font-size:16px;font-weight:750;}
+.feature-card {display:flex;align-items:center;gap:16px;border-radius:20px;padding:14px 16px;margin-top:13px;border:1px solid;}
+.feature-card.green {background:#EBF6EE;border-color:#BFDCC6;}
+.feature-card.orange {background:#FFF3DD;border-color:#F0D39E;}
+.feature-card.purple {background:#F1EDFA;border-color:#D5C7EC;}
+.feature-icon {font-size:38px;flex-shrink:0;}
+.feature-card strong {color:#193A2D;font-size:23px;}
+.feature-card p {margin:4px 0 0!important;font-size:17px!important;color:#46584D!important;}
+.learning-card {background:#F4F7EF;padding:12px 16px;border-radius:16px;color:#315131;text-align:center;margin-top:10px;}
+.learning-card span {font-size:16px;}
+.stButton>button {border-radius:17px;box-shadow:0 3px 0 #C8D9CD;border-color:#A5BCAC!important;}
+button[kind="primary"],[data-testid="stBaseButton-primary"] {background:#087542!important;border-color:#065C34!important;box-shadow:0 4px 0 #054C2B;}
+button[kind="primary"]:hover,[data-testid="stBaseButton-primary"]:hover {background:#065C34!important;}
+@media(max-width:480px) {.block-container {padding:.7rem .75rem 1.5rem;} .feature-card {padding:12px;gap:12px;} .mascot-hero img {max-height:145px;}}
+</style>""", unsafe_allow_html=True)
+
+
 def explain(text):
     st.markdown('<div class="explain">'+html.escape(text)+'</div>', unsafe_allow_html=True)
 
@@ -253,11 +280,23 @@ def drawing(kind="logo", title="", step=0):
     st.markdown(f'<div class="illustration"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 225" role="img" aria-label="{title or "가족과 스마트폰 그림"}">{art}</svg></div>', unsafe_allow_html=True)
 
 
+TEXTS = {
+"한국어": ["스마트폰을 배우고, 가족과 가까워져요", "앱 설치부터 사진으로 질문하기까지, 한 걸음씩 함께해요.", "앱 열기", "오늘도 하나씩, 천천히", "배우기", "사진 도움", "가족 대화", "앱 설치 · 가입 · 로그인", "막힌 화면을 사진으로 질문해요", "사진과 안부를 함께 나눠요", "메뉴", "학습 기록", "사용법을 배웠어요", "처음이라도 괜찮아요. 아래에서 시작하세요.", "홈", "언어"],
+"English": ["Learn your phone. Connect with family.", "Step-by-step smartphone lessons and photo questions for your family.", "Open app", "One small step today", "Learn", "Photo help", "Family chat", "Install · Sign up · Sign in", "Ask your family using a photo", "Share pictures and messages", "Menu", "Your learning", "lessons completed", "New here? Choose a card below.", "Home", "Language"],
+"日本語": ["スマホを学んで、家族とつながる", "アプリの使い方から写真での質問まで、一歩ずつ。", "アプリを開く", "今日も一つずつ、ゆっくり", "学ぶ", "写真で質問", "家族と会話", "インストール・登録・ログイン", "困った画面を写真で質問", "写真とメッセージを共有", "メニュー", "学習の記録", "レッスン完了", "初めてでも大丈夫。下から選んでください。", "ホーム", "言語"]}
+if "language" not in st.session_state:
+    st.session_state.language = "한국어"
+st.selectbox("🌐 언어 / Language / 言語", list(TEXTS), key="language")
+T = TEXTS[st.session_state.language]
+if st.session_state.language != "한국어":
+    st.caption("Home and navigation: translated. Lessons, forms and safety guidance: Korean. / ホームと主要メニューのみ翻訳。教材・入力欄・注意事項は韓国語です。")
+
 def nav():
-    # 주요 기능은 모든 내부 페이지 상단에 반복 배치합니다.
-    for col, (label, target) in zip(st.columns(3), [("📱", "배우기"), ("📷", "도움"), ("💬", "대화")]):
-        if col.button(label, key="nav_"+target, type="primary" if st.session_state.page == target else "secondary", use_container_width=True, help={"배우기":"스마트폰 배우기", "도움":"사진으로 도움 요청", "대화":"가족 대화"}[target]):
+    for col, label, target in zip(st.columns(3), ["📱 " + T[4], "📷 " + T[5], "💬 " + T[6]], ["배우기", "도움", "대화"]):
+        if col.button(label, key="nav_" + target, type="primary" if st.session_state.page == target else "secondary", use_container_width=True):
             go(target)
+    if st.button("🏠 " + T[15], key="nav_home"):
+        go("메인")
     st.markdown('<div class="brand">폰잘알 만들어줄게</div>', unsafe_allow_html=True)
 
 
@@ -284,24 +323,32 @@ if st.session_state.page != "시작":
     nav()
 
 page = st.session_state.page
+def info_card(icon, title, description, color="green"):
+    st.markdown('<div class="feature-card '+color+'"><span class="feature-icon">'+icon+'</span><div><strong>'+html.escape(title)+'</strong><p>'+html.escape(description)+'</p></div></div>', unsafe_allow_html=True)
+
 if page == "시작":
-    drawing()
+    st.markdown('<div class="welcome-label">📱 SMARTPHONE × FAMILY</div>', unsafe_allow_html=True)
     st.title("폰잘알 만들어줄게")
-    if st.button("▶️ 시작", type="primary", help="앱 시작하기"):
+    st.subheader(T[0])
+    drawing()
+    st.markdown('<div class="intro-copy">'+html.escape(T[1])+'</div>', unsafe_allow_html=True)
+    if st.button("🚪 " + T[2], type="primary", use_container_width=True):
         go("메인")
+    st.markdown('<div class="preview-strip">📱 '+html.escape(T[4])+'　 📷 '+html.escape(T[5])+'　 💬 '+html.escape(T[6])+'</div>', unsafe_allow_html=True)
+    st.caption("🔒 사진·대화는 CSV 파일로 교환해요. 실시간 전송·자동 보관은 제공하지 않아요." if st.session_state.language=="한국어" else "🔒 CSV file exchange only · No live delivery or automatic storage.")
 
 elif page == "메인":
+    st.title(T[3])
+    st.markdown('<div class="intro-copy">'+html.escape(T[14])+'</div>', unsafe_allow_html=True)
     drawing()
-    st.title("📱 💗 💬")
-    # 기능 선택 화면에서는 기능명과 그림·이모지만 사용합니다.
-    if st.button("📱 배우기", type="primary"):
-        go("배우기")
-    a,b = st.columns(2)
-    if a.button("📷 도움 요청"):
-        go("도움")
-    if b.button("💬 가족 대화"):
-        go("대화")
-    if st.button("☰ 메뉴"):
+    count=len(st.session_state.done)
+    st.markdown('<div class="learning-card"><strong>🌱 '+html.escape(T[11])+'</strong><br><span>'+str(count)+' / '+str(len(LESSONS))+' · '+html.escape(T[12])+'</span></div>', unsafe_allow_html=True)
+    st.progress(min(count / len(LESSONS), 1.0))
+    for icon, title, desc, target, color in [("📱", T[4], T[7], "배우기", "green"), ("📷", T[5], T[8], "도움", "orange"), ("💬", T[6], T[9], "대화", "purple")]:
+        info_card(icon,title,desc,color)
+        if st.button(icon+" "+title+" →", key="home_"+target, type="primary" if target=="배우기" else "secondary", use_container_width=True):
+            go(target)
+    if st.button("☰ "+T[10]):
         go("메뉴")
 
 elif page == "메뉴":
