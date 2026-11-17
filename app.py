@@ -1,4 +1,4 @@
-"""폰잘알 만들어줄게 | streamlit run app.py
+"""앱잘알 | streamlit run app.py
 GitHub에 app.py와 requirements.txt를 올리고 Streamlit Community Cloud에서 배포하세요.
 CSV 교환형: 실시간 전송, 실제 로그인, 서버 영구 저장은 제공하지 않습니다.
 """
@@ -11,7 +11,7 @@ import html
 from datetime import datetime
 import streamlit as st
 from PIL import Image, ImageOps
-st.set_page_config(page_title="폰잘알 만들어줄게", page_icon="📱", layout="centered", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="앱잘알", page_icon="📱", layout="wide", initial_sidebar_state="collapsed")
 csv.field_size_limit(8 * 1024 * 1024)
 
 
@@ -127,7 +127,7 @@ def read_csv(raw):
         raise ValueError("보관 파일은 20MB 이하만 가져올 수 있어요.")
     reader = csv.DictReader(io.StringIO(raw.decode("utf-8-sig")))
     if reader.fieldnames != FIELDS:
-        raise ValueError("폰잘알 만들어줄게에서 내려받은 CSV 파일을 골라 주세요.")
+        raise ValueError("앱잘알에서 내려받은 CSV 파일을 골라 주세요.")
     result = []
     for i, row in enumerate(reader):
         if i >= MAX_RECORDS:
@@ -158,86 +158,14 @@ for key, value in DEFAULTS.items():
 
 # 크기 변경은 위젯 콜백 이후 재실행 시 즉시 반영됩니다.
 font, button_height, picture_height = {"기본": (18, 52, 175), "크게": (22, 64, 190), "아주 크게": (26, 76, 200)}[st.session_state.scale]
-st.markdown(f"""<style>
-:root {{ --ink:#183E36; --green:#21664F; --paper:#F3F8F5; --accent:#B7521C; }}
-.stApp {{background:var(--paper);color:var(--ink);font-family:system-ui,'Apple SD Gothic Neo',sans-serif;}}
-.block-container {{max-width:640px;padding:1rem 1rem 2rem;}}
-h1,h2,h3 {{text-align:center;color:var(--ink);word-break:keep-all;}}
-h1 {{font-size:clamp(24px,6vw,34px)!important;}} h2,h3 {{font-size:{font+2}px!important;}}
-p,label,li,[data-testid='stMarkdownContainer'] p {{font-size:{font}px!important;line-height:1.55;}}
-.stButton>button,.stFormSubmitButton>button,.stDownloadButton>button {{width:100%;min-height:{button_height}px;border:2px solid var(--green);border-radius:17px;background:white;color:var(--ink);font-weight:750;}}
-.stButton>button p,.stFormSubmitButton>button p,.stDownloadButton>button p {{font-size:{font}px!important;}}
-button[kind='primary'],[data-testid='stBaseButton-primary'] {{background:var(--green)!important;color:white!important;}}
-.stButton>button:hover {{border-color:var(--accent);background:#E4F1EA;}}
-input,textarea {{font-size:{font}px!important;}}
-.explain {{padding:14px 18px;background:#FFF5E9;border-left:5px solid var(--accent);border-radius:10px;font-size:{font}px;line-height:1.6;text-align:left;overflow-wrap:anywhere;}}
-.brand {{text-align:center;font-size:14px;letter-spacing:.03em;color:#426658;margin:4px 0 12px;}}
-.illustration {{display:flex;justify-content:center;margin:4px auto 10px;}}
-.illustration svg {{height:{picture_height}px;max-width:100%;}}
-.note {{text-align:center;color:#426658;font-size:15px;margin:8px 0;}}
-[data-testid='stImage'] {{display:flex;justify-content:center;}}
-button:focus-visible,input:focus-visible,textarea:focus-visible {{outline:4px solid #B7521C!important;outline-offset:3px;}}
-@media(max-width:480px) {{.block-container{{padding-left:.7rem;padding-right:.7rem;}} [data-testid='stHorizontalBlock']{{gap:.45rem;}}}}
-</style>""", unsafe_allow_html=True)
 
 
-st.markdown("""<style>
-:root {color-scheme:light;--ink:#172D41;--green:#006B68;--paper:#FFFFFF;--accent:#A84317;}
-.stApp {background:#FFFFFF;color:#172D41;}
-[data-testid="stHeader"] {background:#FFFFFF;}
-[data-testid="stSidebar"] {background:#F2F5F2;color:#172D41;border-right:2px solid #CCD5CE;}
-h1,h2,h3,p,label,li,[data-testid="stMarkdownContainer"] {color:#172D41;}
-.block-container {max-width:600px;padding-top:.7rem;}
-h1 {font-weight:850;letter-spacing:-.035em;}
-.brand {color:#31493F;letter-spacing:.06em;background:#E4EBD1;border:2px inset #A5B293;border-radius:7px;padding:8px 4px;font-weight:750;}
-.note {color:#405448;}
-.mascot-hero {max-width:390px;margin:8px auto 14px;padding:16px 16px 30px;background:#183F49;border:3px solid #102F38;border-radius:38px 38px 24px 24px;box-shadow:0 6px 0 #BAC8C6;position:relative;}
-.mascot-hero::before {content:"● ● ●";display:block;text-align:right;color:#F6B545;letter-spacing:7px;font-size:15px;margin-bottom:8px;}
-.mascot-hero::after {content:"♥  8282";position:absolute;bottom:5px;left:22px;right:22px;color:#ECF1D6;font:700 16px monospace;letter-spacing:5px;text-align:center;}
-.mascot-hero img {width:100%;max-height:230px;object-fit:contain;border:3px inset #6F8583;border-radius:17px;display:block;background:#0B0B0F;}
-.stButton>button,.stFormSubmitButton>button,.stDownloadButton>button {background:#FFFFFF!important;color:#173B45!important;border:2px solid #51767B!important;border-radius:18px;box-shadow:0 4px 0 #BCCBC9;font-weight:800;}
-.stButton>button p,.stFormSubmitButton>button p,.stDownloadButton>button p {color:#173B45!important;}
-button[kind="primary"],[data-testid="stBaseButton-primary"] {background:#006B68!important;color:#FFFFFF!important;border-color:#005653!important;box-shadow:0 4px 0 #003E3C;}
-button[kind="primary"] p,[data-testid="stBaseButton-primary"] p {color:#FFFFFF!important;}
-.stButton>button:hover {background:#E7F3F0!important;border-color:#006B68!important;}
-button[kind="primary"]:hover,[data-testid="stBaseButton-primary"]:hover {background:#005653!important;}
-.stButton>button:disabled {opacity:.5;box-shadow:none;}
-.explain {background:#FFF5DF;color:#172D41;border-left:6px solid #A84317;border-radius:14px;}
-input,textarea,[data-baseweb="select"]>div {background:#FFFFFF!important;color:#172D41!important;border-color:#748A8D!important;}
-[data-testid="stCaptionContainer"] p {color:#475C63!important;}
-[data-testid="stFileUploader"] {background:#F1F6F3;border:1px solid #9DB4AC;border-radius:16px;padding:8px;}
-[data-testid="stExpander"] {background:#FFFFFF;color:#172D41;}
-[data-testid="stAlert"] p {color:#172D41!important;}
-button:focus-visible,input:focus-visible,textarea:focus-visible {outline:4px solid #BA4C19!important;outline-offset:4px;}
-@media(max-width:480px) {.mascot-hero {max-width:330px;padding:11px 11px 28px;} .mascot-hero img {max-height:190px;} .block-container {padding-top:.4rem;}}
-</style>""", unsafe_allow_html=True)
 
 
-st.markdown("""<style>
-.stApp {background:#F6F8F5;color:#18372D;}
-[data-testid="stHeader"] {background:#F6F8F5;}
-.block-container {background:#FFFFFF;max-width:620px;padding:1rem 1.1rem 2rem;border-left:1px solid #E1E8E1;border-right:1px solid #E1E8E1;min-height:100vh;}
-.mascot-hero {background:#E8F3EA;border:2px solid #D1E6D5;border-radius:28px;box-shadow:none;max-width:350px;padding:10px;margin:12px auto;}
-.mascot-hero::before,.mascot-hero::after {display:none;}
-.mascot-hero img {border:0;border-radius:22px;max-height:180px;}
-.brand {background:#E8F4EA;border:none;border-radius:14px;letter-spacing:0;color:#185338;}
-.welcome-label {text-align:center;letter-spacing:.12em;font-size:13px;color:#346248;font-weight:800;padding-top:12px;}
-.intro-copy {text-align:center;line-height:1.6;color:#42594F;font-size:19px;margin:8px auto 16px;max-width:440px;}
-.preview-strip {background:#F1EDF9;border-radius:18px;padding:15px 8px;text-align:center;color:#513F73;margin-top:18px;font-size:16px;font-weight:750;}
-.feature-card {display:flex;align-items:center;gap:16px;border-radius:20px;padding:14px 16px;margin-top:13px;border:1px solid;}
-.feature-card.green {background:#EBF6EE;border-color:#BFDCC6;}
-.feature-card.orange {background:#FFF3DD;border-color:#F0D39E;}
-.feature-card.purple {background:#F1EDFA;border-color:#D5C7EC;}
-.feature-icon {font-size:38px;flex-shrink:0;}
-.feature-card strong {color:#193A2D;font-size:23px;}
-.feature-card p {margin:4px 0 0!important;font-size:17px!important;color:#46584D!important;}
-.learning-card {background:#F4F7EF;padding:12px 16px;border-radius:16px;color:#315131;text-align:center;margin-top:10px;}
-.learning-card span {font-size:16px;}
-.stButton>button {border-radius:17px;box-shadow:0 3px 0 #C8D9CD;border-color:#A5BCAC!important;}
-button[kind="primary"],[data-testid="stBaseButton-primary"] {background:#087542!important;border-color:#065C34!important;box-shadow:0 4px 0 #054C2B;}
-button[kind="primary"]:hover,[data-testid="stBaseButton-primary"]:hover {background:#065C34!important;}
-@media(max-width:480px) {.block-container {padding:.7rem .75rem 1.5rem;} .feature-card {padding:12px;gap:12px;} .mascot-hero img {max-height:145px;}}
-</style>""", unsafe_allow_html=True)
+
+st.markdown('<style>:root{color-scheme:light;--ink:#25354A;--muted:#5B6572;--paper:#FAF7F1;--blue:#DFEBF5;--lavender:#ECE6F4;--sage:#E8EEE5;--coral:#F5E6E0}\n.stApp,[data-testid=stHeader]{background:var(--paper);color:var(--ink)}\n.block-container{max-width:1100px;padding:1.3rem 2rem 3rem;margin:auto}\nh1,h2,h3{color:var(--ink);letter-spacing:-.035em;word-break:keep-all}\nh1{font-size:clamp(30px,4.5vw,46px)!important;line-height:1.25!important;font-weight:780!important;white-space:pre-line}\nh2{font-size:clamp(27px,3.5vw,38px)!important;line-height:1.3!important}\nh3{font-size:24px!important}p,label,li{color:var(--ink);line-height:1.65}\n.wordmark{font-size:29px;font-weight:850;letter-spacing:-.06em;line-height:1.1;padding:8px 0 22px}.wordmark span{display:block;letter-spacing:.04em;font-size:13px;font-weight:550;color:#606875;margin-top:8px}\n.section-kicker{font-size:13px;font-weight:750;letter-spacing:.11em;color:#596A7C;padding-top:18px;margin-bottom:10px}\n.mascot-hero{margin:10px auto 20px;max-width:390px;padding:0;overflow:hidden;border-radius:8px;background:#0B0B0F}\n.mascot-hero img{width:100%;display:block;object-fit:contain;max-height:270px}\n.service{padding:24px 22px 14px;border-radius:6px 6px 0 0;margin-top:18px;min-height:160px;border-top:2px solid #C8D8E6}.service span{font-size:14px;font-weight:700;letter-spacing:.1em;color:#5A6574}.service h3{margin:9px 0 6px!important}.service p{font-size:18px!important;margin:0!important}\n.blue{background:var(--blue)}.lavender{background:var(--lavender);border-top-color:#D4C6E6}.coral{background:var(--coral);border-top-color:#E7C6B9}.sage{background:var(--sage);border-top-color:#C7D6C1}\n.stButton>button,.stFormSubmitButton>button,.stDownloadButton>button{width:100%;min-height:58px;padding:10px 18px;border-radius:7px;border:1px solid #8999AA;background:#FFFEFB;color:#25354A;box-shadow:none;font-weight:650}\n.stButton>button p,.stFormSubmitButton>button p,.stDownloadButton>button p{color:inherit;line-height:1.35}\nbutton[kind=primary],[data-testid=stBaseButton-primary]{background:#344F69!important;border-color:#344F69!important;color:white!important}button[kind=primary] p{color:white!important}\n.stButton>button:hover{border-color:#344F69;background:#E7EDF2}.stButton>button:disabled{opacity:.48}\nbutton:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #98663B!important;outline-offset:3px}\n.explain{padding:20px 22px;background:#F0EBE0;border-left:3px solid #8C775A;border-radius:0;line-height:1.8;color:#25354A;overflow-wrap:anywhere}\n.illustration{display:flex;justify-content:center;padding:12px;background:#EEEDE8;margin-bottom:16px}.illustration svg{max-height:220px;max-width:100%}\ninput,textarea,[data-baseweb=select]>div{background:#FFFDF9!important;color:#25354A!important;border-radius:6px!important}\n[data-testid=stCaptionContainer] p{color:#5B6572!important;font-size:15px!important}\n[data-testid=stExpander]{border-color:#D8D5CF;border-radius:6px;background:transparent}\n[data-testid=stProgressBar]>div>div{background:#65826E}\nhr{border-color:#DCD9D2;margin:1.8rem 0}\n@media(max-width:640px){.block-container{padding:.8rem 1rem 2rem}.wordmark{font-size:26px}.mascot-hero{max-width:300px}.mascot-hero img{max-height:190px}.service{min-height:0;padding:18px 16px 12px}[data-testid=stHorizontalBlock]{gap:.7rem}h1{font-size:31px!important}}\n</style>', unsafe_allow_html=True)
+
+st.markdown(f"<style>p,label,li,input,textarea {{font-size:{font}px!important;}} .stButton>button,.stFormSubmitButton>button,.stDownloadButton>button {{min-height:{button_height}px;}} .stButton>button p,.stFormSubmitButton>button p {{font-size:{font}px!important;}} .explain {{font-size:{font}px;}}</style>", unsafe_allow_html=True)
 
 
 def explain(text):
@@ -286,18 +214,13 @@ TEXTS = {
 "日本語": ["スマホを学んで、家族とつながる", "アプリの使い方から写真での質問まで、一歩ずつ。", "アプリを開く", "今日も一つずつ、ゆっくり", "学ぶ", "写真で質問", "家族と会話", "インストール・登録・ログイン", "困った画面を写真で質問", "写真とメッセージを共有", "メニュー", "学習の記録", "レッスン完了", "初めてでも大丈夫。下から選んでください。", "ホーム", "言語"]}
 if "language" not in st.session_state:
     st.session_state.language = "한국어"
-st.selectbox("🌐 언어 / Language / 言語", list(TEXTS), key="language")
-T = TEXTS[st.session_state.language]
-if st.session_state.language != "한국어":
-    st.caption("Home and navigation: translated. Lessons, forms and safety guidance: Korean. / ホームと主要メニューのみ翻訳。教材・入力欄・注意事項は韓国語です。")
-
 def nav():
-    for col, label, target in zip(st.columns(3), ["📱 " + T[4], "📷 " + T[5], "💬 " + T[6]], ["배우기", "도움", "대화"]):
-        if col.button(label, key="nav_" + target, type="primary" if st.session_state.page == target else "secondary", use_container_width=True):
+    labels = {"메인":"홈", "배우기":"따라 하며 배우기", "교육":"따라 하며 배우기", "도움":"사진으로 물어보기", "대화":"가족과 대화하기", "학습기록":"내 학습 이어가기"}
+    st.caption("디지털 생활 안내소  /  " + labels.get(st.session_state.page, st.session_state.page))
+    cols=st.columns([1,1,1,1])
+    for col,label,target in zip(cols,["홈","배우기","사진 질문","가족 대화"],["메인","배우기","도움","대화"]):
+        if col.button(label,key="top_"+target,use_container_width=True,type="primary" if st.session_state.page==target else "secondary"):
             go(target)
-    if st.button("🏠 " + T[15], key="nav_home"):
-        go("메인")
-    st.markdown('<div class="brand">폰잘알 만들어줄게</div>', unsafe_allow_html=True)
 
 
 def message(record):
@@ -313,43 +236,95 @@ def message(record):
 
 
 # 첫 접속에는 메뉴·개인정보 입력·체크박스 없이 브랜드 화면만 표시합니다.
-if st.session_state.page != "시작":
-    with st.sidebar:
-        st.title("☰")
-        for label, target in [("🏠 메인", "메인"), ("📖 쉬운 말", "사전"), ("⚙️ 크기·이름", "설정"), ("📁 파일 보관", "보관"), ("ℹ️ 이용 안내", "안내")]:
-            if st.button(label, key="menu_"+target):
-                go(target)
-        st.caption("대화는 접속 중에만 보관돼요. 종료 전 CSV로 내려받으세요.")
-    nav()
+# Compact brand bar and accessible in-flow menu: no clipped sidebar.
+brand, controls = st.columns([3,2])
+with brand:
+    st.markdown('<div class="wordmark">앱잘알<span>디지털 생활 안내소</span></div>',unsafe_allow_html=True)
+with controls:
+    with st.expander("언어 · 메뉴", expanded=False):
+        st.selectbox("Language / 언어 / 言語",list(TEXTS),key="language")
+        for label,target in [("홈","메인"),("쉬운 말 사전","사전"),("내 학습 기록","학습기록"),("글씨 크기 · 이름","설정"),("파일 보관함","보관"),("이용 안내","안내")]:
+            if st.button(label,key="compact_"+target,use_container_width=True): go(target)
+        if st.button("시작 화면 보기",key="welcome_again"): go("시작")
+T=TEXTS[st.session_state.language]
+if st.session_state.language!="한국어":
+    st.caption("Home & main navigation: translated. Detailed lessons and forms: Korean. / 詳しい教材と入力欄は韓国語です。")
+if st.session_state.page!="시작": nav()
+page=st.session_state.page
 
-page = st.session_state.page
-def info_card(icon, title, description, color="green"):
-    st.markdown('<div class="feature-card '+color+'"><span class="feature-icon">'+icon+'</span><div><strong>'+html.escape(title)+'</strong><p>'+html.escape(description)+'</p></div></div>', unsafe_allow_html=True)
+def section_label(kicker,title,desc=""):
+    st.markdown('<div class="section-kicker">'+html.escape(kicker)+'</div>',unsafe_allow_html=True)
+    st.header(title)
+    if desc: st.write(desc)
 
-if page == "시작":
-    st.markdown('<div class="welcome-label">📱 SMARTPHONE × FAMILY</div>', unsafe_allow_html=True)
-    st.title("폰잘알 만들어줄게")
-    st.subheader(T[0])
-    drawing()
-    st.markdown('<div class="intro-copy">'+html.escape(T[1])+'</div>', unsafe_allow_html=True)
-    if st.button("🚪 " + T[2], type="primary", use_container_width=True):
-        go("메인")
-    st.markdown('<div class="preview-strip">📱 '+html.escape(T[4])+'　 📷 '+html.escape(T[5])+'　 💬 '+html.escape(T[6])+'</div>', unsafe_allow_html=True)
-    st.caption("🔒 사진·대화는 CSV 파일로 교환해요. 실시간 전송·자동 보관은 제공하지 않아요." if st.session_state.language=="한국어" else "🔒 CSV file exchange only · No live delivery or automatic storage.")
+def resume_lesson():
+    lesson=st.session_state.get("last_lesson",st.session_state.lesson)
+    st.session_state.lesson=lesson if lesson in LESSONS else next(iter(LESSONS))
+    st.session_state.step=min(st.session_state.get("last_step",st.session_state.step),len(LESSONS[st.session_state.lesson])-1)
+    go("교육")
 
-elif page == "메인":
-    st.title(T[3])
-    st.markdown('<div class="intro-copy">'+html.escape(T[14])+'</div>', unsafe_allow_html=True)
-    drawing()
+if page=="시작":
+    left,right=st.columns([1.15,1],gap="large")
+    with left:
+        section_label("YOUR DIGITAL COMPANION", "스마트폰이 낯설 때,\n앱잘알과 함께.", T[1])
+        st.write("따라 배우고, 사진으로 묻고, 가족과 나누세요." if st.session_state.language=="한국어" else T[0])
+        if st.button("앱 열기 →" if st.session_state.language=="한국어" else T[2]+" →",type="primary",use_container_width=True): go("메인")
+        st.caption("천천히 배워도 괜찮아요. 필요한 순간에 다시 찾아오세요.")
+    with right: drawing()
+    st.divider()
+    for col,title,desc in zip(st.columns(3),["따라 배우기","사진으로 질문","가족과 연결"],["설치부터 로그인까지 한 단계씩","막힌 화면을 보며 함께 해결","사진과 메시지를 파일로 공유"]):
+        with col:
+            st.subheader(title); st.write(desc)
+    st.caption("개인정보를 입력하는 실제 회원가입 앱이 아니에요. 가족 대화는 CSV 파일 교환 방식이에요.")
+
+elif page=="메인":
+    left,right=st.columns([1.25,1],gap="large")
+    with left:
+        section_label("WELCOME HOME", "어디서 막히셨나요?" if st.session_state.language=="한국어" else T[0], "어려운 말은 쉽게, 복잡한 과정은 한 단계씩 함께 풀어요." if st.session_state.language=="한국어" else T[1])
+        with st.form("home_search"):
+            query=st.text_input("궁금한 스마트폰 기능",placeholder="앱 설치, 로그인, 사진 찍기…",label_visibility="collapsed")
+            searched=st.form_submit_button("사용법 찾기",use_container_width=True)
+        if searched:
+            st.session_state.search_query=query.strip(); go("검색")
+    with right: drawing()
+    st.markdown('<div class="section-kicker">무엇을 도와드릴까요?</div>',unsafe_allow_html=True)
+    a,b=st.columns(2,gap="large")
+    items=[(a,"01","따라 하며 배우기" if st.session_state.language=="한국어" else T[4],T[7],"배우기","blue"),(b,"02","사진으로 물어보기" if st.session_state.language=="한국어" else T[5],T[8],"도움","lavender"),(a,"03","가족과 대화하기" if st.session_state.language=="한국어" else T[6],T[9],"대화","coral"),(b,"04","내 학습 이어가기", "마지막으로 보던 단계부터 천천히 다시", "학습기록","sage")]
+    for col,num,title,desc,target,tone in items:
+        with col:
+            st.markdown('<div class="service '+tone+'"><span>'+num+'</span><h3>'+html.escape(title)+'</h3><p>'+html.escape(desc)+'</p></div>',unsafe_allow_html=True)
+            if st.button(title+" →",key="service_"+target,use_container_width=True): go(target)
+    st.divider()
     count=len(st.session_state.done)
-    st.markdown('<div class="learning-card"><strong>🌱 '+html.escape(T[11])+'</strong><br><span>'+str(count)+' / '+str(len(LESSONS))+' · '+html.escape(T[12])+'</span></div>', unsafe_allow_html=True)
-    st.progress(min(count / len(LESSONS), 1.0))
-    for icon, title, desc, target, color in [("📱", T[4], T[7], "배우기", "green"), ("📷", T[5], T[8], "도움", "orange"), ("💬", T[6], T[9], "대화", "purple")]:
-        info_card(icon,title,desc,color)
-        if st.button(icon+" "+title+" →", key="home_"+target, type="primary" if target=="배우기" else "secondary", use_container_width=True):
-            go(target)
-    if st.button("☰ "+T[10]):
-        go("메뉴")
+    st.subheader("차곡차곡 쌓이는 나의 배움")
+    st.write("첫걸음을 시작해 볼까요? 오늘 익힌 하나가 내일의 자신감이 돼요." if not count else f"벌써 {count}가지 사용법을 끝냈어요. 스스로 해내는 일이 늘고 있어요.")
+    st.progress(count/len(LESSONS))
+    if st.button("학습 기록 자세히 보기 →"): go("학습기록")
+    st.caption("가족에게 남긴 사진과 메시지는 CSV를 보내야 전달돼요. 자동 전송은 아니에요.")
+
+elif page=="검색":
+    section_label("FIND YOUR WAY","무엇이 궁금하세요?")
+    query=st.text_input("사용법 또는 쉬운 말 찾기",value=st.session_state.get("search_query",""))
+    matches=[k for k,v in LESSONS.items() if query.strip() and query.casefold() in (k+str(v)).casefold()]
+    for lesson in matches:
+        if st.button(lesson+" 배우기 →",key="search_"+lesson):
+            st.session_state.lesson=lesson; st.session_state.step=0; go("교육")
+    terms=[(k,v) for k,v in WORDS.items() if query.strip() and query.casefold() in (k+v).casefold()]
+    for term,desc in terms[:6]:
+        st.subheader(term); explain(desc)
+    if not matches and not terms:
+        st.info("찾는 말이 없다면 가족에게 사진으로 물어보세요." if query.strip() else "찾고 싶은 기능을 적어 주세요.")
+    if st.button("사진으로 물어보기 →"): go("도움")
+
+elif page=="학습기록":
+    section_label("SMALL STEPS, REAL PROGRESS","내가 익힌 디지털 생활","완료한 사용법과 마지막으로 보던 단계를 확인해요.")
+    st.progress(len(st.session_state.done)/len(LESSONS))
+    for lesson in LESSONS:
+        completed=lesson in st.session_state.done
+        st.write(("✓  " if completed else "○  ")+lesson+(" · 배웠어요" if completed else " · 연습해 볼까요"))
+    if st.button("마지막 학습 이어가기 →",type="primary"): resume_lesson()
+    if st.button("다른 사용법 고르기"): go("배우기")
+    st.caption("학습 기록은 이번 접속 동안 유지돼요. 대화 CSV에는 포함되지 않아요.")
 
 elif page == "메뉴":
     st.title("☰")
@@ -358,7 +333,7 @@ elif page == "메뉴":
             go(target)
 
 elif page == "배우기":
-    st.title("📱")
+    section_label("LEARN AT YOUR PACE", "따라 하며 배우기", "배우고 싶은 것을 골라요. 한 화면에 한 단계씩 안내해 드릴게요.")
     for icon, lesson in zip(["📥", "🪪", "🔑", "📸"], LESSONS):
         if st.button(icon + " " + {"앱 설치하기":"앱 받기", "회원가입하기":"처음 가입", "로그인하기":"들어가기", "화면 사진 남기기":"화면 찍기"}[lesson]):
             st.session_state.lesson = lesson
@@ -368,8 +343,14 @@ elif page == "배우기":
 elif page == "교육":
     lesson, idx = st.session_state.lesson, st.session_state.step
     steps = LESSONS[lesson]
+    st.session_state.last_lesson=lesson
+    st.session_state.last_step=idx
     drawing(lesson, "학습용 휴대폰 화면 예시", idx)
     st.caption("화면 그림은 연습용 예시예요. 실제 앱과 모양이 다를 수 있어요.")
+    if idx == 0:
+        with st.expander("안내자에게 첫걸음 안내받기"):
+            drawing()
+            st.write("아래 설명을 읽고 휴대폰에서 직접 따라 해 보세요. 막히면 이 단계 질문을 눌러 주세요.")
     st.subheader(f"{idx+1} / {len(steps)} · {steps[idx][0]}")
     explain(steps[idx][1])
     a,b = st.columns(2)
@@ -391,7 +372,8 @@ elif page == "교육":
 
 elif page == "학습완료":
     drawing()
-    st.title("참 잘하셨어요! 🎉")
+    st.title("하나 더, 스스로 해냈어요.")
+    st.write("오늘 배운 내용이 학습 기록에 담겼어요. 필요하면 언제든 다시 연습해요.")
     if st.button("📱 다른 사용법 배우기", type="primary"):
         go("배우기")
     if st.button("🏠 메인"):
@@ -435,9 +417,12 @@ elif page == "사전":
         st.info("아직 없는 말이에요. 가족에게 물어보세요.")
 
 elif page == "도움":
-    st.title("📷 도움 요청")
+    section_label("ASK WITH A PHOTO", "사진으로 물어보기", "말로 설명하기 어려울 땐 막힌 화면을 보여 주세요.")
     stage = st.session_state.help_stage
     if stage == 0:
+        with st.expander("안내자와 질문 준비하기", expanded=False):
+            drawing()
+            st.write("화면 고르기 → 개인정보 가리기 → 궁금한 점 남기기 순서예요.")
         explain("1. 막힌 화면 사진을 골라 주세요. 비밀번호·인증번호·계좌번호는 먼저 가리세요.")
         method = st.selectbox("사진 가져오기", ["저장된 사진", "카메라"])
         upload = st.file_uploader("사진 선택 · 3MB 이하", type=["jpg","jpeg","png","webp"], key="help_image") if method == "저장된 사진" else st.camera_input("다른 휴대폰 화면 촬영")
@@ -478,7 +463,7 @@ elif page == "도움":
             st.rerun()
 
 elif page == "대화":
-    st.title("💬 가족 대화")
+    section_label("FAMILY SPACE", "가족과 대화하기", "짧은 안부부터 어려운 스마트폰 질문까지, 함께 나눠요.")
     a,b=st.columns(2)
     if a.button("✏️ 글·사진 남기기", type="primary"):
         go("메시지작성")
