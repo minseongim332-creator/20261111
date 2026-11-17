@@ -193,21 +193,22 @@ def message(record):
             st.text(record['text'])
         if record['image_b64']:
             st.image(base64.b64decode(record['image_b64']), caption='공유한 사진', width=240)
-st.selectbox("Language · 언어", list(LANGUAGES), key="language",format_func=lambda value: LANGUAGES[value][1]+" · "+value)
-st.session_state.translation_failed=False
-if LANGUAGES[st.session_state.language][0] in ['ar','iw','ur','fa']:
-    st.markdown('<style>[data-testid="stMain"] {direction:rtl;text-align:right;} input,textarea {direction:rtl;}</style>',unsafe_allow_html=True)
-brand, controls = st.columns([3, 2])
-with brand:
-    st.markdown(tx_html('<div class="wordmark">앱잘알<span>디지털 생활 안내소</span></div>'), unsafe_allow_html=True)
-with controls:
-    with st.expander(tx('언어 · 메뉴'), expanded=False):
-        pass
-        for label, target in [('홈', '메인'), ('쉬운 말 사전', '사전'), ('내 학습 기록', '학습기록'), ('글씨 크기 · 이름', '설정'), ('파일 보관함', '보관'), ('이용 안내', '안내')]:
-            if st.button(tx(label), key='compact_' + target, use_container_width=True):
-                go(target)
-        if st.button(tx('시작 화면 보기'), key='welcome_again'):
-            go('시작')
+if st.session_state.page != '시작':
+    st.selectbox("Language · 언어", list(LANGUAGES), key="language",format_func=lambda value: LANGUAGES[value][1]+" · "+value)
+    st.session_state.translation_failed=False
+    if LANGUAGES[st.session_state.language][0] in ['ar','iw','ur','fa']:
+        st.markdown('<style>[data-testid="stMain"] {direction:rtl;text-align:right;} input,textarea {direction:rtl;}</style>',unsafe_allow_html=True)
+    brand, controls = st.columns([3, 2])
+    with brand:
+        st.markdown(tx_html('<div class="wordmark">앱잘알<span>디지털 생활 안내소</span></div>'), unsafe_allow_html=True)
+    with controls:
+        with st.expander(tx('언어 · 메뉴'), expanded=False):
+            pass
+            for label, target in [('홈', '메인'), ('쉬운 말 사전', '사전'), ('내 학습 기록', '학습기록'), ('글씨 크기 · 이름', '설정'), ('파일 보관함', '보관'), ('이용 안내', '안내')]:
+                if st.button(tx(label), key='compact_' + target, use_container_width=True):
+                    go(target)
+            if st.button(tx('시작 화면 보기'), key='welcome_again'):
+                go('시작')
 T = TEXTS['한국어']
 if st.session_state.page != '시작':
     nav()
@@ -225,21 +226,12 @@ def resume_lesson():
     st.session_state.step = min(st.session_state.get('last_step', st.session_state.step), len(LESSONS[st.session_state.lesson]) - 1)
     go('교육')
 if page == '시작':
-    left, right = st.columns([1.15, 1], gap='large')
-    with left:
-        section_label('YOUR DIGITAL COMPANION', '스마트폰이 낯설 때,\n앱잘알과 함께.', T[1])
-        st.write(tx('따라 배우고, 사진으로 묻고, 가족과 나누세요.' if True else T[0]))
-        if st.button(tx('앱 열기 →' if True else T[2] + ' →'), type='primary', use_container_width=True):
-            go('메인')
-        st.caption(tx('천천히 배워도 괜찮아요. 필요한 순간에 다시 찾아오세요.'))
-    with right:
-        drawing()
-    st.divider()
-    for col, title, desc in zip(st.columns(3), ['따라 배우기', '사진으로 질문', '가족과 연결'], ['설치부터 로그인까지 한 단계씩', '막힌 화면을 보며 함께 해결', '사진과 메시지를 파일로 공유']):
-        with col:
-            st.subheader(tx(title))
-            st.write(tx(desc))
-    st.caption(tx('개인정보를 입력하는 실제 회원가입 앱이 아니에요. 가족 대화는 CSV 파일 교환 방식이에요.'))
+    import time
+    st.markdown('<style>.stApp,[data-testid="stHeader"]{background:#FFE275!important}.splash{position:fixed;inset:0;z-index:999999;background:#FFE275;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px}.splash svg{width:116px;height:150px}.splash-name{font-size:40px;color:#26364A;text-align:center;font-family:Jua,sans-serif}header,footer,[data-testid="stToolbar"]{visibility:hidden}</style>',unsafe_allow_html=True)
+    st.markdown('<div class="splash"><svg viewBox="0 0 120 160" xmlns="http://www.w3.org/2000/svg" aria-label="앱잘알 스마트폰 로고"><rect x="20" y="5" width="80" height="150" rx="19" fill="#26364A"/><rect x="27" y="16" width="66" height="121" rx="12" fill="#FFFDF5"/><rect x="43" y="10" width="34" height="5" rx="2.5" fill="#FFFDF5"/><path d="M40 48h40v34H58l-12 10V82h-6z" fill="#BADBF0"/><path d="m49 64 8 8 15-17" fill="none" stroke="#26364A" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><rect x="47" y="144" width="26" height="4" rx="2" fill="#FFFDF5"/></svg><div class="splash-name">앱잘알</div></div>',unsafe_allow_html=True)
+    time.sleep(3)
+    go('메인')
+
 elif page == '메인':
     left, right = st.columns([1.25, 1], gap='large')
     with left:
@@ -538,7 +530,7 @@ elif page == '안내':
         st.write(tx('부모님이 글이나 사진을 남겨요 → CSV를 내려받아 자녀에게 보내요 → 자녀가 CSV를 가져와 답장을 남겨요 → 다시 CSV를 보내요. 이름과 역할은 표시용이고 가족 인증 기능은 없어요.'))
     with st.expander(tx('화면과 학습')):
         st.write(tx('기능은 별도 화면으로 바뀌어요. 교육·사전·대화는 하나씩 넘겨 봐요. 아주 작은 화면, 아주 큰 글씨, 사진·입력창에서는 내용이 잘리지 않도록 스크롤이 남을 수 있어요. 학습 그림은 실제 앱 캡처가 아닌 설명용 예시예요.'))
-if st.session_state.get("language","한국어")!="한국어":
+if st.session_state.page != "시작" and st.session_state.get("language","한국어")!="한국어":
     st.caption("Automatic translation · Google public web translation · No API key · Availability/accuracy not guaranteed. Private messages and uploaded photos are not translated.")
     if st.session_state.get("translation_failed"):
         st.warning("Some text could not be translated. Marked [Original / 번역 대기] · 번역에 실패한 문구는 원문으로 표시했어요. 잠시 후 다시 시도해 주세요.")
