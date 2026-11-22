@@ -1,4 +1,0 @@
-streamlit>=1.45,<2
-Pillow>=10,<13
-requests>=2.31,<3
-supabase>=2,<3
