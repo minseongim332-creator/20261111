@@ -438,6 +438,7 @@ if S.lesson not in LESSONS:S.lesson='install'
 if S.pop('_load_warning',False):
     st.warning(t('sync_failed'))
 st.markdown(design.css(S.big),unsafe_allow_html=True)
+st.markdown('<style>\n@import url(\'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css\');\n:root{--ink:#26364A;--line:#C8C4BC;--radius:20px;--sky:#E9F2FA;--lav:#F0EAF8;--sage:#EAF1E8;--coral:#F8EDE9}\n.stApp,.stApp [data-testid="stHeader"]{background:#F5F0E8;color:var(--ink)}\n.stApp :is(h1,h2,h3,p,label,input,textarea,button,li){font-family:Pretendard,"Noto Sans KR",sans-serif;color:var(--ink)}\n.stApp h1{font-weight:800;line-height:1.18;font-size:clamp(2rem,5vw,3.1rem)}\n.stApp h2,.stApp h3{font-weight:700}.stApp p{line-height:1.55}\n.stApp [data-testid="stMainBlockContainer"]{padding-top:3.5rem;padding-bottom:2rem}\n.st-key-hero_layout{background:#FFFBF4;border:1px solid var(--line);border-radius:28px;padding:clamp(16px,4vw,34px)}\n.st-key-hero_layout .hero{background:transparent;border:0;box-shadow:none;padding:0}\n.st-key-hero_layout .hero-sub{font-weight:700;font-size:clamp(1.25rem,3vw,1.7rem)}\n.stApp :is(.stButton,.stFormSubmitButton,.stDownloadButton) button{min-height:54px;border-radius:16px;border:1px solid var(--line);transition:box-shadow .18s,transform .18s}\n.stApp :is(.stButton,.stFormSubmitButton,.stDownloadButton) button p{font-weight:650}\n.stApp button[kind="primary"]{background:#355777;color:#fff;border-color:#355777}.stApp button[kind="primary"] p{color:#fff}\n.stApp :is(button,input,textarea,[role="combobox"]):focus-visible{outline:3px solid #355777;outline-offset:2px}\n.st-key-feature_learn{--card:var(--sky)}.st-key-feature_photo{--card:var(--lav)}.st-key-feature_chat{--card:var(--coral)}.st-key-feature_record{--card:var(--sage)}\n.st-key-featuregrid [class*="st-key-feature_"]{background:var(--card);border-radius:var(--radius);border:1px solid var(--line);padding:14px;min-height:150px}\n.st-key-featuregrid button{background:#FFFFFFB8;width:100%}.st-key-featuregrid button p{font-weight:700!important}\n.st-key-featuregrid [data-testid="stCaptionContainer"] p{font-weight:500;color:var(--ink)}\n.stApp :is([data-baseweb="input"],[data-baseweb="textarea"],[data-baseweb="select"]>div,[data-testid="stFileUploaderDropzone"],[data-testid="stAlert"],details,[data-testid="stDialog"] [role="dialog"],[data-testid="stVerticalBlockBorderWrapper"]){border-radius:var(--radius)}\n.stApp :is([data-testid="stFileUploaderDropzone"],details){background:#FFFBF4}\n.stApp .stProgress [role="progressbar"]{border-radius:12px;overflow:hidden}.stApp .stProgress [role="progressbar"]>div{background:#527156;border-radius:12px}\n.stApp [data-testid="stImage"] img{border-radius:var(--radius);max-width:100%;height:auto}\n.stApp .st-key-bottom_nav{position:static;border:1px solid var(--line);border-radius:var(--radius);padding:10px;background:#FFFBF4}\n@media (hover:hover) and (prefers-reduced-motion:no-preference){.stApp button:not(:disabled):hover{transform:translateY(-2px);box-shadow:0 4px 12px #26364A18}}\n@media(max-width:620px){.stApp .st-key-bottom_nav [data-testid="stHorizontalBlock"]{flex-wrap:wrap!important}.stApp .st-key-bottom_nav [data-testid="stColumn"]{flex:1 1 30%!important}.st-key-featuregrid [class*="st-key-feature_"]{min-height:0}}\n</style>',unsafe_allow_html=True)
 # Attempt saving completed interactions before the next functional render.
 try:
     services.save_progress()
@@ -480,10 +481,18 @@ elif S.page=='home':
                 with col:
                     with st.container(key='feature_'+page):
                         if st.button(icon+'  '+t(page),key='home_'+page,use_container_width=True):go(page)
-                    st.caption(t(page+'_hint'))
+                        st.caption(t(page+'_hint'))
     st.divider()
+    with st.container(border=True, key='daily_pick'):
+        st.subheader('오늘의 추천 학습' if S.lang=='ko' else 'Today’s lesson')
+        candidates=[key for key in LESSONS if key not in S.completed] or list(LESSONS)
+        pick=candidates[datetime.now(timezone.utc).date().toordinal()%len(candidates)]
+        st.write(LESSONS[pick][0])
+        st.caption(LESSONS[pick][1])
+        if st.button(t('open'),key='today_pick',use_container_width=True):S.lesson=pick;go('learn')
+    st.subheader('최근 학습 이어하기' if S.lang=='ko' else 'Continue learning')
     progress()
-    st.caption(LESSONS[S.lesson][0]+' · '+t('step')+' '+str(S.steps.get(S.lesson,0)+1))
+    st.caption(('✓ ' if S.lesson in S.completed else '')+LESSONS[S.lesson][0]+' · '+t('step')+' '+str(S.steps.get(S.lesson,0)+1))
     if st.button(t('continue'),key='home_continue',type='primary',use_container_width=True):go('learn')
 elif S.page=='safety':
     nav();st.title(t('safety'));st.write('급한 송금이나 인증번호 요구에는 응하지 말고 공식 창구에서 확인해요.');features.quiz()
